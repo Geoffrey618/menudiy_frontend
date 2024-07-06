@@ -7,26 +7,26 @@
         <hr>
         <center>
             <div class="div1">
-                <p id="IBM"><b>您的IBM值为:</b></p>
-                <p id="rl"><b>您每日所需的热量为:</b></p>
-                <p id="ts"><b>您每日所需的碳水化合物为:</b></p>
-                <p id="ss"><b>您每日所需的膳食纤维为:</b></p>
-                <p id="db"><b>您每日所需的蛋白质为:</b></p>
-                <p id="zf"><b>您每日所需的脂肪为:</b></p>
-                <p id="gc"><b>您每日所需的胆固醇为:</b></p>
-                <p id="ys"><b>您每日所需的叶酸为:</b></p>
-                <p id="A"><b>您每日所需的维生素A为:</b></p>
-                <p id="B"><b>您每日所需的维生素B为:</b></p>
-                <p id="C"><b>您每日所需的维生素C为:</b></p>
-                <p id="D"><b>您每日所需的维生素D为:</b></p>
-                <p id="E"><b>您每日所需的维生素E为:</b></p>
-                <p id="Na"><b>您每日所需的钠为:</b></p>
-                <p id="K"><b>您每日所需的钾为:</b></p>
-                <p id="Ga"><b>您每日所需的钙为:</b></p>
-                <p id="P"><b>您每日所需的磷为:</b></p>
-                <p id="Mg"><b>您每日所需的镁为:</b></p>
-                <p id="Fe"><b>您每日所需的铁为:</b></p>
-                <p id="Zn"><b>您每日所需的锌为:</b></p>
+                <p id="IBM"><b>您的BMI值为:</b> {{ nutritionData.bmi.toFixed(2) }}</p>
+                <p id="rl"><b>您每日所需的热量为:</b> {{ nutritionData.tee.toFixed(2) }}</p>
+                <p id="ts"><b>您每日所需的碳水化合物为:</b> {{ nutritionData.carbs.toFixed(2) }}</p>
+                <p id="ss"><b>您每日所需的膳食纤维为:</b> {{ nutritionData.fiber.toFixed(2) }}</p>
+                <p id="db"><b>您每日所需的蛋白质为:</b> {{ nutritionData.protein.toFixed(2) }}</p>
+                <p id="zf"><b>您每日所需的脂肪为:</b> {{ nutritionData.fat.toFixed(2) }}</p>
+                <p id="gc"><b>您每日所需的胆固醇为:</b> {{ nutritionData.dgc.toFixed(2) }}</p>
+                <p id="ys"><b>您每日所需的叶酸为:</b> {{ nutritionData.ga.toFixed(2) }}</p>
+                <p id="A"><b>您每日所需的维生素A为:</b> {{ nutritionData.va.toFixed(2) }}</p>
+                <p id="B"><b>您每日所需的维生素B为:</b> {{ nutritionData.vb.toFixed(2) }}</p>
+                <p id="C"><b>您每日所需的维生素C为:</b> {{ nutritionData.vc.toFixed(2) }}</p>
+                <p id="D"><b>您每日所需的维生素D为:</b> {{ nutritionData.vd.toFixed(2) }}</p>
+                <p id="E"><b>您每日所需的维生素E为:</b> {{ nutritionData.ve.toFixed(2) }}</p>
+                <p id="Na"><b>您每日所需的钠为:</b> {{ nutritionData.na.toFixed(2) }}</p>
+                <p id="K"><b>您每日所需的钾为:</b> {{ nutritionData.k.toFixed(2) }}</p>
+                <p id="Ga"><b>您每日所需的钙为:</b> {{ nutritionData.ga.toFixed(2) }}</p>
+                <p id="P"><b>您每日所需的磷为:</b> {{ nutritionData.p.toFixed(2) }}</p>
+                <p id="Mg"><b>您每日所需的镁为:</b> {{ nutritionData.mg.toFixed(2) }}</p>
+                <p id="Fe"><b>您每日所需的铁为:</b> {{ nutritionData.fe.toFixed(2) }}</p>
+                <p id="Zn"><b>您每日所需的锌为:</b> {{ nutritionData.zn.toFixed(2) }}</p>
             </div>
         </center>
         <hr>
@@ -42,32 +42,8 @@
                         <th>周六</th>
                         <th>周日</th>
                     </tr>
-                    <tr>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                        <td>早餐: 土豆</td>
-                    </tr>
-                    <tr>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                        <td>午餐: 土豆<br>土豆、土豆</td>
-                    </tr>
-                    <tr>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
-                        <td>晚餐: 土豆</td>
+                    <tr v-for="(meal, index) in meals" :key="index">
+                        <td v-for="day in week" :key="day">{{ meal[day] }}</td>
                     </tr>
                 </table>
             </div>
@@ -79,7 +55,61 @@
 
 <script>
 export default {
+    props: ['nutritionData'],
+    data() {
+        return {
+            meals: [],
+            week: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        };
+    },
+    created() {
+        this.fetchOptimizedMenu();
+    },
     methods: {
+        fetchOptimizedMenu() {
+            fetch('/optimize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ min_weights: this.getMinWeights() }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let breakfast = {};
+                    let lunch = {};
+                    let dinner = {};
+                    data.forEach(dayMenu => {
+                        breakfast[dayMenu.day] = dayMenu.menu[0];
+                        lunch[dayMenu.day] = dayMenu.menu[1];
+                        dinner[dayMenu.day] = dayMenu.menu[2];
+                    });
+                    this.meals = [breakfast, lunch, dinner];
+                });
+        },
+        getMinWeights() {
+            return [
+                this.nutritionData.tee,
+                this.nutritionData.carbs,
+                this.nutritionData.fiber,
+                this.nutritionData.protein,
+                this.nutritionData.fat,
+                this.nutritionData.dgc,
+                this.nutritionData.vb9,
+                this.nutritionData.va,
+                this.nutritionData.vb,
+                this.nutritionData.vc,
+                0,  // 假设缺少 vd
+                this.nutritionData.ve,
+                this.nutritionData.na,
+                this.nutritionData.k,
+                this.nutritionData.ga,
+                this.nutritionData.p,
+                this.nutritionData.mg,
+                this.nutritionData.fe,
+                this.nutritionData.zn
+            ];
+        },
         goToLink(page) {
             if (page === 'homepage') {
                 this.$router.push('/'); // Replace with your home route

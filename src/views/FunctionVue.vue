@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <form action="#" class="form1">
+        <form @submit.prevent="handleSubmit" class="form1">
             <label><b>性别：</b></label>
             <input type="radio" name="gender" value="男" v-model="gender"> <b>男 </b>
             <input type="radio" name="gender" value="女" v-model="gender"> <b> 女</b>
@@ -30,7 +30,7 @@
             <input type="checkbox" value="高脂" v-model="hobby"> <b>高脂 </b>
             <br><br>
 
-            <input type="submit" value="生成" @click="goToResult()" id="submit">
+            <input type="submit" value="生成" id="submit">
         </form>
 
         <button id="back" @click="goToLink">返回主页</button>
@@ -53,8 +53,27 @@ export default {
         goToLink() {
             this.$router.push('/');
         },
-        goToResult() {
-            this.$router.push('result');
+        handleSubmit() {
+            const payload = {
+                gender: this.gender,
+                age: this.age,
+                weight: this.weight,
+                height: this.height,
+                move: "中",  // 示例数据，可以从用户输入获取
+                dgc: this.hobby.includes('高脂') ? '是' : '否'
+            };
+
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.$router.push({ name: 'result', params: { nutritionData: data } });
+                });
         }
     }
 }
